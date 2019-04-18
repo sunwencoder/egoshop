@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<style>
+    #alipay{
+        font-size: 40px;
+        margin: 50px;
+    }
+
+</style>
+<body>
+<input type="button" value="请点我吧！！！" id='alipay'/>
+<form id="form" action="https://www.payelves.com/api/v1/pay/web" method="post">
+    <input type="hidden" name="openId" value="woeQxl2zn" />
+    <input type="hidden" name="appKey" value="8109107043565570" />
+    <input type="hidden" name="sign" id='sign' value="9f6e47d28d750782ee246abe21276e8f" />
+    <input type="hidden" name="channel" value="baidu" />
+    <input type="hidden" name="dateTime" value="2018-10-01 15:19:50" />
+    <input type="hidden" name="price" value="50" />
+    <input type="hidden" name="userId" value="123abc" />
+    <input type="hidden" name="clientVersion" value="3.3.0" />
+    <input type="hidden" name="payType" id='payType' value="1" />
+    <input type="hidden" name="subject" value="精灵生活助手" />
+    <input type="hidden" name="body" value="精灵生活助手" />
+    <input type="hidden" name="orderId" value="abc123" />
+    <input type="hidden" name="backPara" value="1a" />
+    <input type="hidden" name="uuid" value="1" />
+</form>
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="StringUtils.js?v=20190320"></script>
+<script type="text/javascript" src="Map.js"></script>
+<script type="text/javascript" src="md5.js"></script>
+<script type="text/javascript" src="pay.js?v=20190320"></script>
+<script type="text/javascript">
+    function createURLLink(map) {
+        var sb = new StringBuffer();
+        var str1 = "=";
+        var str2 = "&";
+        var keys = map.keyArray();
+        var values = map.valueArray();
+        for (var i = 0; i < map.size(); i++) {
+            var key = keys[i];
+            var value = values[i];
+            sb.append(key).append(str1).append(value == null ? "" : value).append(str2);
+        }
+        return sb.toString().substring(0, sb.toString().length - 1);
+    }
+    $(document).ready(function() {
+       var map = new Map();
+       var token = "b602b8c5969d4455b8c3e09b7997c7c7";
+        map.put("appKey",form.appKey.value);
+        map.put("backPara",form.backPara.value);
+        map.put("body",form.body.value);
+        map.put("channel",form.channel.value);
+        map.put("clientVersion",form.clientVersion.value);
+        map.put("dateTime",form.dateTime.value);
+        map.put("openId",form.openId.value);
+        map.put("orderId",form.orderId.value);
+        map.put("payType",form.payType.value);
+        map.put("price",form.price.value);
+        map.put("subject",form.subject.value);
+        map.put("userId",form.userId.value);
+        map.put("uuid",form.uuid.value);
+
+        var strs = createURLLink(map);
+        //add token
+        var strfinal = strs+token;
+        console.log("strfinal:"+strfinal);
+         var sign1 = md5(strfinal);
+        console.log("strs:"+strs+"\nsign1:"+sign1);
+        var finishStr = strfinal+"&sign="+sign1;
+        console.log("finish:"+finishStr);
+        $("#alipay").click(function() {
+            $('#sign').val(sign1);
+            $('#payType').val('1');
+            $('#form').submit();
+        });
+    })//end document
+</script>
+</body>
+</html>
